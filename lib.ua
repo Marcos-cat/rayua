@@ -17,8 +17,6 @@ LibraryVersion ← "5.5"
 
 # Utils
 
-Types! ↚^ $"⊓(_)" /$"_|_" ⍚(⍥$"⍜°_∘"⊸(˜∊1±)) ⊙◌
-
 # Structs
 
 ~Window {Width Height Title}
@@ -296,7 +294,7 @@ GetRenderHeight ← (Rl {"int" "GetRenderHeight"} {})
 
 # Get window scale DPI factor
 # DPIScale ?
-GetWindowScaleDPI ← (Types!Vector₂ Rl {FFIVector₂ "GetWindowScaleDPI"} {})
+GetWindowScaleDPI ← (⍜°Vector₂∘ Rl {FFIVector₂ "GetWindowScaleDPI"} {})
 
 # Get current monitor where window is placed
 # Monitor ?
@@ -316,7 +314,7 @@ SetWindowSize ← (◌Rl {"void" "SetWindowSize" "int" "int"} {⊙∘})
 
 # Set background color (framebuffer clear color)
 # ? Color
-ClearBackground ← ◌Rl {"void" "ClearBackground" FFIColor} {Types!(Color)}
+ClearBackground ← ◌Rl {"void" "ClearBackground" FFIColor} {⍜°(Color)∘}
 
 # Setup canvas (framebuffer) to start drawing.
 BeginDrawing ← (◌Rl {"void" "BeginDrawing"} {})
@@ -326,20 +324,20 @@ EndDrawing ← (◌Rl {"void" "EndDrawing"} {})
 
 # Begin 3D mode with custom camera (3D)
 # ? Camera
-BeginModeThreeD ← ◌ Rl {"void" "BeginMode3D" FFICameraThreeD} {Types!(CameraThreeD)}
+BeginModeThreeD ← ◌ Rl {"void" "BeginMode3D" FFICameraThreeD} {⍜°(CameraThreeD)∘}
 
 # Ends 3D mode and returns to default 2D orthographic mode
 EndModeThreeD ← (◌ Rl {"void" "EndMode3D"} {})
 
 # Update camera position for selected mode
 # Camera ? Camera Mode
-UpdateCamera ← Types!(CameraThreeD) Rl {"void" "UpdateCamera" ˜⊂@*FFICameraThreeD "int"} {Types!(CameraThreeD|∘)}
+UpdateCamera ← ⍜°(CameraThreeD)∘ Rl {"void" "UpdateCamera" ˜⊂@*FFICameraThreeD "int"} {⍜°⊓(CameraThreeD|∘)∘}
 
 # Update camera movement/rotation
 # Camera ? Camera Movement Rotation Zoom
 UpdateCameraPro ← (
-  {Types!(CameraThreeD|Vector₃|Vector₃|∘)}
-  Types!(CameraThreeD) Rl {"void" "UpdateCameraPro" ˜⊂@*FFICameraThreeD FFIVector₃ FFIVector₃ "float"}
+  {⍜°⊓(CameraThreeD|Vector₃|Vector₃|∘)∘}
+  ⍜°(CameraThreeD)∘ Rl {"void" "UpdateCameraPro" ˜⊂@*FFICameraThreeD FFIVector₃ FFIVector₃ "float"}
 )
 
 # Check if a mouse button has been pressed once.
@@ -360,11 +358,11 @@ IsMouseButtonUp ← Rl {"char" "IsMouseButtonUp" "int"} {∘}
 
 # Get the current mouse position.
 # Vector2 ?
-GetMousePosition ← (Types!Vector₂ (Rl {FFIVector₂ "GetMousePosition"} {}))
+GetMousePosition ← (⍜°Vector₂∘ (Rl {FFIVector₂ "GetMousePosition"} {}))
 
 # Get mouse delta between frames.
 # Vector2 ?
-GetMouseDelta ← (Types!Vector₂ (Rl {FFIVector₂ "GetMouseDelta"} {}))
+GetMouseDelta ← (⍜°Vector₂∘ (Rl {FFIVector₂ "GetMouseDelta"} {}))
 
 # Set mouse position.
 # ? Vector2
@@ -374,7 +372,7 @@ SetMousePosition ← ◌Rl {"void" "SetMousePosition" "int" "int"} {°⊟⁅}
 GetMouseWheelMove ← (Rl {"float" "GetMouseWheelMove"} {})
 
 # Get mouse wheel movement for both X and Y
-GetMouseWheelMoveV ← (Types!Vector₂ Rl {FFIVector₂ "GetMouseWheelMoveV"} {})
+GetMouseWheelMoveV ← (⍜°Vector₂∘ Rl {FFIVector₂ "GetMouseWheelMoveV"} {})
 
 # Shows cursor.
 ShowCursor ← (◌Rl {"void" "ShowCursor"} {})
@@ -435,28 +433,28 @@ SetExitKey ← ◌Rl {"void" "SetExitKey" "int"} {KeyCode}
 # Draw a pixel using geometry [Can be slow, use with care].
 # ? Position Color
 DrawPixel ← (
-  {Types!(Vector₂|Color)}
+  {⍜°⊓(Vector₂|Color)∘}
   ◌Rl {"void" "DrawPixelV" FFIVector₂ FFIColor}
 )
 
 # Draw a line.
 # ? VectorFrom VectorTo Color
 DrawLine ← (
-  {Types!(Vector₂|Vector₂|Color)}
+  {⍜°⊓(Vector₂|Vector₂|Color)∘}
   ◌Rl {"void" "DrawLineV" FFIVector₂ FFIVector₂ FFIColor}
 )
 
 # Draw a line with thickness.
 # ? VectorFrom VectorTo Thickness Color
 DrawLineEx ← (
-  {Types!(Vector₂|Vector₂|∘|Color)}
+  {⍜°⊓(Vector₂|Vector₂|∘|Color)∘}
   ◌Rl {"void" "DrawLineEx" FFIVector₂ FFIVector₂ "float" FFIColor}
 )
 
 # Draw a line strip.
 # ? Vectors Color
 DrawLineStrip ← (
-  {Types!(≡Vector₂|Color)}
+  {⍜°⊓(≡Vector₂|Color)∘}
   ◌Rl {"void" "DrawLineStrip" $"const _:1"FFIVector₂ "int" FFIColor}
 )
 
@@ -475,35 +473,35 @@ DrawCircleLines ← ◌Rl {"void" "DrawCircleLinesV" FFIVector₂ "float" FFICol
 # Draw a color-filled piece of a circle.
 # ? Center Radius StartAngle EndAngle Segments Color
 DrawCircleSector ← (
-  {Types!(Vector₂|∘|∘|∘|⁅|Color)}
+  {⍜°⊓(Vector₂|∘|∘|∘|⌅⁅|Color)∘}
   ◌Rl {"void" "DrawCircleSector" FFIVector₂ "float" "float" "float" "int" FFIColor}
 )
 
 # Draw circle sector outline.
 # ? Center Radius StartAngle EndAngle Segments Color
 DrawCircleSectorLines ← (
-  {Types!(Vector₂|∘|∘|∘|⁅|Color)}
+  {⍜°⊓(Vector₂|∘|∘|∘|⌅⁅|Color)∘}
   ◌Rl {"void" "DrawCircleSectorLines" FFIVector₂ "float" "float" "float" "int" FFIColor}
 )
 
 # Draw a color-filled ellipse.
 # ? Center HorizontalRadius VerticalRadius Color
 DrawEllipse ← (
-  {Types!(°⊟⁅|∘|∘|Color)}
+  {°⊟ ⍜°⊓(⌅⁅|∘|∘|Color)∘}
   ◌Rl {"void" "DrawEllipse" "int" "int" "float" "float" FFIColor}
 )
 
 # Draw ellipse outline.
 # ? Center HorizontalRadius VerticalRadius Color
 DrawEllipseLines ← (
-  {Types!(°⊟⁅|∘|∘|Color)}
+  {°⊟ ⍜°⊓(⌅⁅|∘|∘|Color)∘}
   ◌Rl {"void" "DrawEllipseLines" "int" "int" "float" "float" FFIColor}
 )
 
 # Draw a color-filled ring.
 # ? Center InnerRadius OuterRadius StartAngle EndAngle Segments Color
 DrawRing ← (
-  {Types!(Vector₂|∘|∘|∘|∘|⁅|Color)}
+  {⍜°⊓(Vector₂|∘|∘|∘|∘|⌅⁅|Color)∘}
   ◌Rl {"void" "DrawRing" FFIVector₂ "float" "float" "float" "float" "int" FFIColor}
 )
 
@@ -536,20 +534,20 @@ DrawPoly ← ◌Rl {"void" "DrawPoly" FFIVector₂ "int" "float" "float" FFIColo
 DrawPolyLines ← ◌Rl {"void" "DrawPolyLines" FFIVector₂ "int" "float" "float" FFIColor} {⊙⊙⊙⊙∘}
 
 # Get the default Font
-GetFontDefault ← (Types!Font Rl {FFIFont "GetFontDefault"} {})
+GetFontDefault ← (⍜°Font∘ Rl {FFIFont "GetFontDefault"} {})
 
 # Load font from file into GPU memory (VRAM)
-LoadFont ← Types!Font Rl {FFIFont "LoadFont" "const char*"} □₁
+LoadFont ← ⍜°Font∘ Rl {FFIFont "LoadFont" "const char*"} □₁
 
 # Load font from file with extended parameters, use NULL for codepoints and 0 for codepointCount to load the default character set, font size is provided in pixels height
 # ? FileName FontSize Codepoints
-LoadFontEx ← Types!Font Rl {FFIFont "LoadFontEx" "const char*" "int" "const int:3" "int"} □₃
+LoadFontEx ← ⍜°Font∘ Rl {FFIFont "LoadFontEx" "const char*" "int" "const int:3" "int"} □₃
 
 # Check if a font is valid (font data loaded, WARNING: GPU texture not checked)
-IsFontValid ← Rl {"int" "IsFontValid" FFIFont} {Types!Font}
+IsFontValid ← Rl {"int" "IsFontValid" FFIFont} {⍜°Font∘}
 
 # Unload font from GPU memory (VRAM)
-UnloadFont ← ◌ Rl {"void" "UnloadFont" FFIFont} {Types!Font}
+UnloadFont ← ◌ Rl {"void" "UnloadFont" FFIFont} {⍜°Font∘}
 
 # Draw text using default font.
 # ? Text Position Size Color
@@ -557,7 +555,7 @@ DrawText ← ◌ Rl {"void" "DrawText" "const char*" "int" "int" "int" FFIColor}
 
 # Draw text using font and additional parameters
 # ? Font Text Position FontSize Spacing Tint
-DrawTextEx ← ◌ Rl {"void" "DrawTextEx" FFIFont "const char*" FFIVector₂ "float" "float" FFIColor} {Types!(Font|∘|Vector₂|∘|∘|Color)}
+DrawTextEx ← ◌ Rl {"void" "DrawTextEx" FFIFont "const char*" FFIVector₂ "float" "float" FFIColor} {⍜°⊓(Font|∘|Vector₂|∘|∘|Color)∘}
 
 # Measure string width for default font.
 # Width ? Text Size
@@ -565,7 +563,7 @@ MeasureText ← Rl {"int" "MeasureText" "const char*" "int"} {⊙∘}
 
 # Measure string size for Font
 # ? Font Text FontSize Spacing
-MeasureTextEx ← Types!Vector₂ Rl {FFIVector₂ "MeasureTextEx" FFIFont "const char*" "float" "float"} {Types!(Font|∘|∘|∘)}
+MeasureTextEx ← ⍜°Vector₂∘ Rl {FFIVector₂ "MeasureTextEx" FFIFont "const char*" "float" "float"} {⍜°⊓(Font|∘|∘|∘)∘}
 
 # Draw text using the default font, centered around the given position.
 # ? Text Position Size Color
@@ -575,15 +573,15 @@ DrawTextCentered ← DrawText :-⊙:÷2⊟ ◡⊃(MeasureText ⊙⋅∘|⋅⋅�
 
 # Draw cube
 # ? Position Size Color
-DrawCube ← ◌ Rl {"void" "DrawCubeV" FFIVector₃ FFIVector₃ FFIColor} {Types!(Vector₃|Vector₃|Color)}
+DrawCube ← ◌ Rl {"void" "DrawCubeV" FFIVector₃ FFIVector₃ FFIColor} {⍜°⊓(Vector₃|Vector₃|Color)∘}
 
 # Draw cube wires
 # ? Position Size Color
-DrawCubeWires ← ◌ Rl {"void" "DrawCubeWiresV" FFIVector₃ FFIVector₃ FFIColor} {Types!(Vector₃|Vector₃|Color)}
+DrawCubeWires ← ◌ Rl {"void" "DrawCubeWiresV" FFIVector₃ FFIVector₃ FFIColor} {⍜°⊓(Vector₃|Vector₃|Color)∘}
 
 # Upload mesh vertex data in GPU and provide VAO/VBO ids
 # Mesh ? Mesh Dynamic
-UploadMesh ← Types!(Mesh) Rl {"void" "UploadMesh" ˜⊂@*FFIMesh "unsigned char"} {Types!(Mesh|∘)}
+UploadMesh ← ⍜°(Mesh)∘ Rl {"void" "UploadMesh" ˜⊂@*FFIMesh "unsigned char"} {⍜°⊓(Mesh|∘)∘}
 
 # TODO:
 # bool IsModelValid(Model model);                                                       // Check if a model is valid (loaded in GPU, VAO/VBOs)
@@ -591,46 +589,46 @@ UploadMesh ← Types!(Mesh) Rl {"void" "UploadMesh" ˜⊂@*FFIMesh "unsigned cha
 
 # Load model from files (meshes and materials)
 # Model ? FileName
-LoadModel ← Types!(Model) Rl {FFIModel "LoadModel" "const char*"} □₁
+LoadModel ← ⍜°(Model)∘ Rl {FFIModel "LoadModel" "const char*"} □₁
 
 # Load model from generated mesh (default material)
 # Model ? Mesh
-LoadModelFromMesh ← Types!(Model) Rl {FFIModel "LoadModelFromMesh" FFIMesh} {Types!(Mesh)}
+LoadModelFromMesh ← ⍜°(Model)∘ Rl {FFIModel "LoadModelFromMesh" FFIMesh} {⍜°(Mesh)∘}
 
 # Draw a model (with texture if set)
 # ? Model Position Scale Color
-DrawModel ← ◌ Rl {"void" "DrawModel" FFIModel FFIVector₃ "float" FFIColor} {Types!(Model|Vector₃|∘|Color)}
+DrawModel ← ◌ Rl {"void" "DrawModel" FFIModel FFIVector₃ "float" FFIColor} {⍜°⊓(Model|Vector₃|∘|Color)∘}
 
 # Draw a model with extended parameters
 # ? Model Position RotationAxis RotationAngle Scale Tint
-DrawModelEx ← ◌ Rl {"void" "DrawModel" FFIModel FFIVector₃ FFIVector₃ "float" FFIVector₃ FFIColor} {Types!(Model|Vector₃|Vector₃|∘|Vector₃|Color)}
+DrawModelEx ← ◌ Rl {"void" "DrawModel" FFIModel FFIVector₃ FFIVector₃ "float" FFIVector₃ FFIColor} {⍜°⊓(Model|Vector₃|Vector₃|∘|Vector₃|Color)∘}
 
 # Generate image: plain color
 # ? Width Height Color
 GenImageColor ← (
-  {Types!(∘|∘|Color)}
+  {⍜°⊓(∘|∘|Color)∘}
   Rl {FFIImage "GenImageColor" "int" "int" FFIColor}
-  Types!Image
+  ⍜°Image∘
 )
 
 # Unload image from CPU memory (RAM)
 # ? Image
-UnloadImage ← ◌ Rl {"void" "UnloadImage" FFIImage} {Types!Image}
+UnloadImage ← ◌ Rl {"void" "UnloadImage" FFIImage} {⍜°Image∘}
 
 # Load image from screen buffer and (screenshot)
-LoadImageFromScreen ← (Types!Image Rl {FFIImage "LoadImageFromScreen"} {})
+LoadImageFromScreen ← (⍜°Image∘ Rl {FFIImage "LoadImageFromScreen"} {})
 
 # Load image from GPU texture data
 # ? Texture
-LoadImageFromTexture ← Types!Image Rl {FFIImage "LoadImageFromTexture" FFITexture} {Types!Texture}
+LoadImageFromTexture ← ⍜°Image∘ Rl {FFIImage "LoadImageFromTexture" FFITexture} {⍜°Texture∘}
 
 # Load texture from image data
 # ? Image
-LoadTextureFromImage ← Types!Texture Rl {FFITexture "LoadTextureFromImage" FFIImage} {Types!Image}
+LoadTextureFromImage ← ⍜°Texture∘ Rl {FFITexture "LoadTextureFromImage" FFIImage} {⍜°Image∘}
 
 # Load texture from file into GPU memory
 # ? Path
-LoadTexture ← Types!Texture Rl {FFITexture "LoadTexture" "const char*"} {∘}
+LoadTexture ← ⍜°Texture∘ Rl {FFITexture "LoadTexture" "const char*"} {∘}
 
 # Update GPU texture with new data
 # ? Texture Pixels
@@ -639,115 +637,115 @@ UpdateTexture ← ◌Rl {"void" "UpdateTexture" FFITexture "const unsigned char*
 # Update GPU texture rectangle with new data
 # ? Texture Rectangle Pixels
 UpdateTextureRec ← (
-  {Types!(Texture|Rectangle|∘)}
+  {⍜°⊓(Texture|Rectangle|∘)∘}
   ◌Rl {"void" "UpdateTextureRec" FFITexture FFIRectangle "const unsigned char*"}
 )
 
 # Unload texture from GPU memory
 # ? Texture
-UnloadTexture ← ◌Rl {"void" "UnloadTexture" FFITexture} {Types!Texture}
+UnloadTexture ← ◌Rl {"void" "UnloadTexture" FFITexture} {⍜°Texture∘}
 
 # Draw a texture.
 # ? Texture Position TintColor
-DrawTexture ← ◌Rl {"void" "DrawTextureV" FFITexture FFIVector₂ FFIColor} {Types!(Texture|Vector₂|Color)}
+DrawTexture ← ◌Rl {"void" "DrawTextureV" FFITexture FFIVector₂ FFIColor} {⍜°⊓(Texture|Vector₂|Color)∘}
 
 # Draw a texture with extended parameters.
 # ? Texture Position Rotation Scale TintColor
 DrawTextureEx ← (
-  {Types!(Texture|Vector₂|∘|∘|Color)}
+  {⍜°⊓(Texture|Vector₂|∘|∘|Color)∘}
   ◌Rl {"void" "DrawTextureEx" FFITexture FFIVector₂ "float" "float" FFIColor}
 )
 
 # Draw a part of a texture.
 # ? Texture SourceRectangle Position TintColor
 DrawTextureRec ← (
-  {Types!(Texture|Rectangle|Vector₂|Color)}
+  {⍜°⊓(Texture|Rectangle|Vector₂|Color)∘}
   ◌Rl {"void" "DrawTextureRec" FFITexture FFIRectangle FFIVector₂ FFIColor}
 )
 
 # Draw a part of a texture defined by a rectangle with 'pro' parameters
 # ? Texture SourceRectangle DestinationRectangle Origin Rotation TintColor
 DrawTexturePro ← (
-  {Types!(Texture|Rectangle|Rectangle|Vector₂|∘|Color)}
+  {⍜°⊓(Texture|Rectangle|Rectangle|Vector₂|∘|Color)∘}
   ◌Rl {"void" "DrawTexturePro" FFITexture FFIRectangle FFIRectangle FFIVector₂ "float" FFIColor}
 )
 
 # Check collision between two rectangles.
 # Boolean ? Rectangle Rectangle
 CheckCollisionRecs ← (
-  {Types!(Rectangle|Rectangle)}
+  {⍜°⊓(Rectangle|Rectangle)∘}
   Rl {"char" "CheckCollisionRecs" FFIRectangle FFIRectangle}
 )
 
 # Check collision between two circles.
 # Boolean ? Center1 Radius1 Center2 Radius2
 CheckCollisionCircles ← (
-  {Types!(Vector₂|∘|Vector₂|∘)}
+  {⍜°⊓(Vector₂|∘|Vector₂|∘)∘}
   Rl {"char" "CheckCollisionCircles" FFIVector₂ "float" FFIVector₂ "float"}
 )
 
 # Check collision between circle and rectangle.
 # Boolean ? Center Radius Rectangle
 CheckCollisionCircleRec ← (
-  {Types!(Vector₂|∘|Rectangle)}
+  {⍜°⊓(Vector₂|∘|Rectangle)∘}
   Rl {"char" "CheckCollisionCircleRec" FFIVector₂ "float" FFIRectangle}
 )
 
 # Check if circle collides with a line created between two points.
 # Boolean ? Center Radius Point1 Point2
 CheckCollisionCircleLine ← (
-  {Types!(Vector₂|∘|Vector₂|Vector₂)}
+  {⍜°⊓(Vector₂|∘|Vector₂|Vector₂)∘}
   Rl {"char" "CheckCollisionCircleLine" FFIVector₂ "float" FFIVector₂ FFIVector₂}
 )
 
 # Check if point is inside rectangle.
 # Boolean ? Point Rectangle
 CheckCollisionPointRec ← (
-  {Types!(Vector₂|Rectangle)}
+  {⍜°⊓(Vector₂|Rectangle)∘}
   Rl {"char" "CheckCollisionPointRec" FFIVector₂ FFIRectangle}
 )
 
 # Check if point is inside circle.
 # Boolean ? Point Center Radius
 CheckCollisionPointCircle ← (
-  {Types!(Vector₂|Vector₂|∘)}
+  {⍜°⊓(Vector₂|Vector₂|∘)∘}
   Rl {"char" "CheckCollisionPointCircle" FFIVector₂ FFIVector₂ "float"}
 )
 
 # Check if point is inside a triangle.
 # Boolean ? Point Point1 Point2 Point3
 CheckCollisionPointTriangle ← (
-  {Types!(Vector₂|Vector₂|Vector₂|Vector₂)}
+  {⍜°⊓(Vector₂|Vector₂|Vector₂|Vector₂)∘}
   Rl {"char" "CheckCollisionPointTriangle" FFIVector₂ FFIVector₂ FFIVector₂ FFIVector₂}
 )
 
 # Check if point belongs to line created between two points.
 # Boolean ? Point Point1 Point2 Threshold
 CheckCollisionPointLine ← (
-  {Types!(Vector₂|Vector₂|Vector₂|∘)}
+  {⍜°⊓(Vector₂|Vector₂|Vector₂|∘)∘}
   Rl {"char" "CheckCollisionPointLine" FFIVector₂ FFIVector₂ FFIVector₂ "int"}
 )
 
 # Check if point is within a polygon described by array of vertices.
 # Boolean ? Point Points
 CheckCollisionPointPoly ← (
-  {Types!(Vector₂|≡Vector₂)}
+  {⍜°⊓(Vector₂|≡Vector₂)∘}
   Rl {"char" "CheckCollisionPointPoly" FFIVector₂ $"const _:2"FFIVector₂ "int"}
 )
 
 # Check the collision between two lines defined by two points each.
 # Boolean ? StartPos1 EndPos1 StartPos2 EndPos2
 CheckCollisionLines ← (
-  {Types!(Vector₂|Vector₂|Vector₂|Vector₂)}
+  {⍜°⊓(Vector₂|Vector₂|Vector₂|Vector₂)∘}
   Rl {"char" "CheckCollisionLines" FFIVector₂ FFIVector₂ FFIVector₂ FFIVector₂}
 )
 
 # Get the intersection of two rectangles.
 # Rectangle ? Rectangle Rectangle
 GetCollisionRec ← (
-  {Types!(Rectangle|Rectangle)}
+  {⍜°⊓(Rectangle|Rectangle)∘}
   Rl {FFIRectangle "GetCollisionRec" FFIRectangle FFIRectangle}
-  Types!Rectangle
+  ⍜°Rectangle∘
 )
 
 # Initialize audio device and context
@@ -766,54 +764,54 @@ SetMasterVolume ← ◌Rl {"void" "SetMasterVolume" "float"} □₁
 GetMasterVolume ← (Rl {"float" "SetMasterVolume"} {})
 
 # Load wave data from file
-LoadWave ← Types!Wave Rl {FFIWave "LoadWave" "const char*"} □₁
+LoadWave ← ⍜°Wave∘ Rl {FFIWave "LoadWave" "const char*"} □₁
 
 # Load wave from memory buffer, fileType refers to extension: i.e. '.wav'
 # ? FileType FileData
-LoadWaveFromMemory ← Types!Wave Rl {FFIWave "LoadWaveFromMemory" "const char*" "const unsigned char:2" "int"} □₂
+LoadWaveFromMemory ← ⍜°Wave∘ Rl {FFIWave "LoadWaveFromMemory" "const char*" "const unsigned char:2" "int"} □₂
 
 # Checks if wave data is valid (data loaded and parameters)
-IsWaveValid ← Rl {"int" "IsWaveValid" FFIWave} {Types!Wave}
+IsWaveValid ← Rl {"int" "IsWaveValid" FFIWave} {⍜°Wave∘}
 
 # Load sound from file
-LoadSound ← Types!Sound Rl {FFISound "LoadSound" "const char*"} □₁
+LoadSound ← ⍜°Sound∘ Rl {FFISound "LoadSound" "const char*"} □₁
 
 # Load sound from wave data 
-LoadSoundFromWave ← Types!Sound Rl {FFISound "LoadSoundFromWave" FFIWave} {Types!Wave}
+LoadSoundFromWave ← ⍜°Sound∘ Rl {FFISound "LoadSoundFromWave" FFIWave} {⍜°Wave∘}
 
 # Create a new sound that shares the same sample data as the source sound, does not own the sound data
-LoadSoundAlias ← Types!Sound Rl {FFISound "LoadSoundAlias" FFISound} {Types!Sound}
+LoadSoundAlias ← ⍜°Sound∘ Rl {FFISound "LoadSoundAlias" FFISound} {⍜°Sound∘}
 
 # Checks if a sound is valid (data loaded and buffers initialized)
-IsSoundValid ← Rl {"int" "IsSoundValid" FFISound} {Types!Sound}
+IsSoundValid ← Rl {"int" "IsSoundValid" FFISound} {⍜°Sound∘}
 
 # Update sound buffer with new data
 # ? Sound Data SampleCount
-UpdateSound ← ◌ Rl {"void" "UpdateSound" FFISound "const unsigned char*" "int"} {Types!(Sound|∘|∘)}
+UpdateSound ← ◌ Rl {"void" "UpdateSound" FFISound "const unsigned char*" "int"} {⍜°⊓(Sound|∘|∘)∘}
 
 # Unload wave data
-UnloadWave ← ◌ Rl {"void" "UnloadWave" FFIWave} {Types!Wave}
+UnloadWave ← ◌ Rl {"void" "UnloadWave" FFIWave} {⍜°Wave∘}
 
 # Unload sound 
-UnloadSound ← ◌ Rl {"void" "UnloadSound" FFISound} {Types!Sound}
+UnloadSound ← ◌ Rl {"void" "UnloadSound" FFISound} {⍜°Sound∘}
 
 # Unload a sound alias (does not deallocate sample data)
-UnloadSoundAlias ← ◌Rl{"void" "UnloadSoundAlias" FFISound} {Types!Sound}
+UnloadSoundAlias ← ◌Rl{"void" "UnloadSoundAlias" FFISound} {⍜°Sound∘}
 
 # Play a sound
-PlaySound ← ◌ Rl {"void" "PlaySound" FFISound} {Types!Sound}
+PlaySound ← ◌ Rl {"void" "PlaySound" FFISound} {⍜°Sound∘}
 
 # Stop playing a sound
-StopSound ← ◌ Rl {"void" "StopSound" FFISound} {Types!Sound}
+StopSound ← ◌ Rl {"void" "StopSound" FFISound} {⍜°Sound∘}
 
 # Pause a sound
-PauseSound ← ◌ Rl {"void" "PauseSound" FFISound} {Types!Sound}
+PauseSound ← ◌ Rl {"void" "PauseSound" FFISound} {⍜°Sound∘}
 
 # Resume a paused sound
-ResumeSound ← ◌ Rl {"void" "ResumeSound" FFISound} {Types!Sound}
+ResumeSound ← ◌ Rl {"void" "ResumeSound" FFISound} {⍜°Sound∘}
 
 # Check if a sound is currently playing
-IsSoundPlaying ← Rl {"int" "IsSoundPlaying" FFISound} {Types!Sound}
+IsSoundPlaying ← Rl {"int" "IsSoundPlaying" FFISound} {⍜°Sound∘}
 
 # Set volume for a sound (1.0 is max level)
-SetSoundVolume ← ◌ Rl {"void" "SetSoundVolume" FFISound "float"} {Types!(Sound|∘)}
+SetSoundVolume ← ◌ Rl {"void" "SetSoundVolume" FFISound "float"} {⍜°⊓(Sound|∘)∘}
